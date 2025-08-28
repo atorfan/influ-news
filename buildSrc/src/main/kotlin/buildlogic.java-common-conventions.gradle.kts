@@ -13,6 +13,12 @@ repositories {
 }
 
 dependencies {
+    // SpringBoot
+    implementation("org.springframework.boot:spring-boot-starter-web:3.5.5")
+
+    // SpringBoot Test
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.5")
+
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
 
