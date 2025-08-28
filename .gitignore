@@ -1,0 +1,65 @@
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### Ignore IntelliJ IDEA... ###
+.idea/*
+*.iws
+*.iml
+*.ipr
+.mvn
+mvnw
+mvnw.cmd
+### ...but keep codestyle files 🤩 ###
+!.idea/
+!.idea/codeStyles
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+.DS_Store
+**.DS_Store
+
+### Maven ###
+/target/
+*/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### Gradle ###
+**/build/
+.gradle
+
+### Logs ###
+log
+*.log
+
+### Env ###
+.env
+.env.test
+
+### Terraform ###
+/**/.terraform/
+/**/terraform.tfstate*
+/**/crash.log
+
+### Project Inception ###
+.todo
+github
+jenkinsPipeline
+
+# Lambda build and zips
+**/build/*
+**/dist/*
+
+# Ignore Gradle build output directory
+build
