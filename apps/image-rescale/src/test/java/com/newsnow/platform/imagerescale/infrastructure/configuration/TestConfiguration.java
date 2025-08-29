@@ -10,7 +10,7 @@ public class TestConfiguration {
     public static final String TEST_IMAGE_PATH = "/images/test.jpg";
 
     @Bean
-    RescaleImage rescaleImage() {
+    RescaleImage rescaleImageUseCase() {
         return command -> TEST_IMAGE_PATH;
     }
 }
