@@ -33,7 +33,8 @@ final class RescaleImageController {
     ) throws URISyntaxException, IOException {
 
         var command = new RescaleImageCommand(id, image.getBytes(), width, height);
-        var accessibleImageUrl = rescaleImage.apply(command);
+        var result = rescaleImage.apply(command);
+        var accessibleImageUrl = result.get();
 
         return ResponseEntity.created(new URI(""))
                 .body(new RescaleImageResponse(accessibleImageUrl));

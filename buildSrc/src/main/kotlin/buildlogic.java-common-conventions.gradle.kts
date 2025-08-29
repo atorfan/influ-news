@@ -13,6 +13,9 @@ repositories {
 }
 
 dependencies {
+    // Vavr with Either
+    implementation("io.vavr:vavr:0.10.+")
+
     // SpringBoot
     implementation("org.springframework.boot:spring-boot-starter-web:3.5.+")
 

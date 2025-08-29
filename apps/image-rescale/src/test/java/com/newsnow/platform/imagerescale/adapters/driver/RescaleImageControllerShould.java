@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.UUID;
 
+import static helpers.ImageCreationHelperForTest.createImageWithSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,17 +54,5 @@ final class RescaleImageControllerShould {
                 .param("id", taskId.toString())
                 .param("width", String.valueOf(width))
                 .param("height", String.valueOf(height)));
-    }
-
-    private static byte[] createImageWithSize(int width, int height) throws Exception {
-        var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        var graphics = image.createGraphics();
-        graphics.setColor(Color.BLUE);
-        graphics.fillRect(0, 0, width, height);
-        graphics.dispose();
-
-        var baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
-        return baos.toByteArray();
     }
 }
