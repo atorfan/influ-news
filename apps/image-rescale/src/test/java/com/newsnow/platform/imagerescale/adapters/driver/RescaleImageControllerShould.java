@@ -1,0 +1,69 @@
+package com.newsnow.platform.imagerescale.adapters.driver;
+
+import com.newsnow.platform.imagerescale.infrastructure.configuration.TestConfiguration;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.UUID;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(RescaleImageController.class)
+@Import(TestConfiguration.class)
+final class RescaleImageControllerShould {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void resize_image_and_retrieve_accessible_url() throws Exception {
+        var taskId = UUID.randomUUID();
+        var image = createImageWithSize(800, 600);
+
+        requestRescaleFor(taskId, image, 400, 300)
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.accessibleImageUrl").value(TestConfiguration.TEST_IMAGE_PATH));
+    }
+
+    private ResultActions requestRescaleFor(
+            UUID taskId,
+            byte[] image,
+            int width,
+            int height
+    ) throws Exception {
+
+        var imageFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                image
+        );
+        return mockMvc.perform(multipart("/task")
+                .file(imageFile)
+                .param("id", taskId.toString())
+                .param("width", String.valueOf(width))
+                .param("height", String.valueOf(height)));
+    }
+
+    private static byte[] createImageWithSize(int width, int height) throws Exception {
+        var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        var graphics = image.createGraphics();
+        graphics.setColor(Color.BLUE);
+        graphics.fillRect(0, 0, width, height);
+        graphics.dispose();
+
+        var baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos);
+        return baos.toByteArray();
+    }
+}

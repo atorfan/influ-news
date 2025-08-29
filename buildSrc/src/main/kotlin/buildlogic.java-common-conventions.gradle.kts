@@ -14,13 +14,16 @@ repositories {
 
 dependencies {
     // SpringBoot
-    implementation("org.springframework.boot:spring-boot-starter-web:3.5.5")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.5.+")
 
     // SpringBoot Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.5")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.+")
+
+    // Assertions Library
+    testImplementation("org.assertj:assertj-core:3.27.+")
 
     // Use JUnit Jupiter for testing.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.+")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
