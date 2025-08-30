@@ -7,6 +7,7 @@ public record RescaleImageTask(
         UUID id,
         LocalDateTime createdAt,
         ImageHash originalImageHash,
-        ImageResolution appliedResolution
+        ImageResolution appliedResolution,
+        String imageUrl
 ) {
 }

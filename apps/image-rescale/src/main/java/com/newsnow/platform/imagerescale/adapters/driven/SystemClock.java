@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class SystemClock implements NewsNowClock {
+final class SystemClock implements NewsNowClock {
 
     @Override
     public LocalDateTime currentTimestamp() {
