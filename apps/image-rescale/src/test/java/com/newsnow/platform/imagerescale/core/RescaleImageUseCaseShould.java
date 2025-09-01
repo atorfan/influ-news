@@ -39,25 +39,6 @@ final class RescaleImageUseCaseShould {
         imageStorage = (filename, imageData) -> IMAGE_URL;
     }
 
-    @Test
-    @DisplayName("resizes the image to the desired resolution")
-    void resize_image() throws Exception {
-        var desiredWidth = 400;
-        var desiredHeight = 300;
-        var command = aCommandWith(desiredWidth, desiredHeight);
-
-        var result = useCase()
-                .apply(command);
-
-        assertThat(result.hasErrors())
-                .isFalse();
-        assertThat(repository.findBy(command.id()))
-                .isNotNull()
-                .isEqualTo(
-                        aRescaleImageTaskWithResolution(desiredWidth, desiredHeight)
-                );
-    }
-
     @ParameterizedTest
     @CsvSource({
             "0, 300",
@@ -79,14 +60,35 @@ final class RescaleImageUseCaseShould {
     }
 
     @Test
+    @DisplayName("Saves the task with the desired resolution")
+    void save_task_with_desired_resolution() throws Exception {
+        var desiredWidth = 400;
+        var desiredHeight = 300;
+        var command = aCommandWith(desiredWidth, desiredHeight);
+
+        var result = useCase()
+                .apply(command);
+
+        assertThat(result.hasErrors())
+                .isFalse();
+        assertThat(repository.findBy(command.id()))
+                .isNotNull()
+                .isEqualTo(
+                        aRescaleImageTaskWithResolution(desiredWidth, desiredHeight)
+                );
+    }
+
+    @Test
     @DisplayName("Saves the task with the current timestamp as the creation time")
     void save_task_with_created_at() throws Exception {
         var command = aCommand();
         var expectedTimestamp = LocalDateTime.now();
 
-        useCaseWith(() -> expectedTimestamp)
+        var result = useCaseWith(() -> expectedTimestamp)
                 .apply(command);
 
+        assertThat(result.hasErrors())
+                .isFalse();
         assertThat(repository.findBy(command.id()))
                 .isNotNull()
                 .isEqualTo(
@@ -99,9 +101,11 @@ final class RescaleImageUseCaseShould {
     void save_task_with_original_image_hash() throws Exception {
         var command = aCommand();
 
-        useCase()
+        var result = useCase()
                 .apply(command);
 
+        assertThat(result.hasErrors())
+                .isFalse();
         assertThat(repository.findBy(command.id()))
                 .isNotNull()
                 .isEqualTo(
@@ -110,8 +114,8 @@ final class RescaleImageUseCaseShould {
     }
 
     @Test
-    @DisplayName("Return an accessible URL for the rescaled image")
-    void persist_and_return_an_accessible_url() throws Exception {
+    @DisplayName("Saves the accessible URL for the rescaled image in the task and returns it")
+    void save_accessible_url_and_return_it() throws Exception {
         var command = aCommand();
         var expectedImageUrl = "testingImageUrl";
 
