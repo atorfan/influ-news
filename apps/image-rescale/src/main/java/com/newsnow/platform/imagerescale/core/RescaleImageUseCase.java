@@ -6,6 +6,7 @@ import com.newsnow.platform.imagerescale.core.domain.RescaleImageTask;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImage;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImageCommand;
 import com.newsnow.platform.imagerescale.core.ports.api.UseCaseResult;
+import com.newsnow.platform.imagerescale.core.ports.spi.ImageRescaleService;
 import com.newsnow.platform.imagerescale.core.ports.spi.NewsNowClock;
 import com.newsnow.platform.imagerescale.core.ports.spi.RescaleImageTaskRepository;
 import com.newsnow.platform.imagerescale.core.ports.spi.ImageStorage;
@@ -13,11 +14,18 @@ import com.newsnow.platform.imagerescale.core.ports.spi.ImageStorage;
 @UseCase
 public final class RescaleImageUseCase implements RescaleImage {
 
+    private final ImageRescaleService imageRescaleService;
     private final RescaleImageTaskRepository repository;
     private final NewsNowClock clock;
     private final ImageStorage imageStorage;
 
-    public RescaleImageUseCase(RescaleImageTaskRepository repository, NewsNowClock clock, ImageStorage imageStorage) {
+    public RescaleImageUseCase(
+            ImageRescaleService imageRescaleService,
+            RescaleImageTaskRepository repository,
+            NewsNowClock clock,
+            ImageStorage imageStorage
+    ) {
+        this.imageRescaleService = imageRescaleService;
         this.repository = repository;
         this.clock = clock;
         this.imageStorage = imageStorage;
@@ -26,15 +34,17 @@ public final class RescaleImageUseCase implements RescaleImage {
     @Override
     public UseCaseResult<String> apply(RescaleImageCommand command) {
         try {
-            var imageFilename = command.id().toString();
-            var accessibleImageUrl = imageStorage.store(imageFilename, command.imageData());
-
+            byte[] originalImageData = command.imageData();
             var desiredResolution = new ImageResolution(command.targetImageWidth(), command.targetImageHeight());
-            var originalImageHash = ImageHash.from(command.imageData());
+            byte[] rescaledImageData = imageRescaleService.rescale(originalImageData, desiredResolution);
+
+            var imageFilename = command.id().toString();
+            var accessibleImageUrl = imageStorage.store(imageFilename, rescaledImageData);
+
             var task = new RescaleImageTask(
                     command.id(),
                     clock.currentTimestamp(),
-                    originalImageHash,
+                    ImageHash.from(originalImageData),
                     desiredResolution,
                     accessibleImageUrl
             );

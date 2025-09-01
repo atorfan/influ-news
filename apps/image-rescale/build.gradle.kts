@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-
+    implementation("net.coobird:thumbnailator:0.4.+")
 }
 
 application {

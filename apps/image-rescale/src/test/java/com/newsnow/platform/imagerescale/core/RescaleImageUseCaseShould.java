@@ -1,8 +1,12 @@
 package com.newsnow.platform.imagerescale.core;
 
 import com.newsnow.platform.imagerescale.adapters.driven.InMemoryRescaleImageTaskRepository;
+import com.newsnow.platform.imagerescale.core.domain.ImageResolution;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImage;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImageCommand;
+import com.newsnow.platform.imagerescale.core.ports.spi.FakeImageRescaleService;
+import com.newsnow.platform.imagerescale.core.ports.spi.FakeImageStorage;
+import com.newsnow.platform.imagerescale.core.ports.spi.ImageRescaleService;
 import com.newsnow.platform.imagerescale.core.ports.spi.ImageStorage;
 import com.newsnow.platform.imagerescale.core.ports.spi.NewsNowClock;
 import com.newsnow.platform.imagerescale.core.ports.spi.RescaleImageTaskRepository;
@@ -28,15 +32,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 final class RescaleImageUseCaseShould {
 
+    private FakeImageRescaleService imageRescaleService;
     private RescaleImageTaskRepository repository;
     private NewsNowClock newsNowsClock;
-    private ImageStorage imageStorage;
+    private FakeImageStorage imageStorage;
 
     @BeforeEach
     void setUp() {
+        imageRescaleService = new FakeImageRescaleService(new byte[0]);
         repository = new InMemoryRescaleImageTaskRepository();
         newsNowsClock = () -> TASK_CREATED_AT;
-        imageStorage = (filename, imageData) -> IMAGE_URL;
+        imageStorage = new FakeImageStorage(IMAGE_URL);
     }
 
     @ParameterizedTest
@@ -114,23 +120,48 @@ final class RescaleImageUseCaseShould {
     }
 
     @Test
-    @DisplayName("Saves the accessible URL for the rescaled image in the task and returns it")
-    void save_accessible_url_and_return_it() throws Exception {
+    @DisplayName("Rescale the image with the desired resolution")
+    void rescale_image_with_desired_resolution() throws Exception {
         var command = aCommand();
-        var expectedImageUrl = "testingImageUrl";
 
-        var result = useCaseWith((filename, imageData) -> expectedImageUrl)
+        var result = useCaseWith(imageRescaleService, imageStorage)
                 .apply(command);
 
         assertThat(result.hasErrors())
                 .isFalse();
-        assertThat(result.get())
-                .isEqualTo(expectedImageUrl);
+        assertThat(imageRescaleService.appliedRescaleResolution())
+                .isNotNull()
+                .isEqualTo(
+                        new ImageResolution(command.targetImageWidth(), command.targetImageHeight())
+                );
+    }
+
+    @Test
+    @DisplayName("Store the image, save the accessible URL for the rescaled image in the task and returns it")
+    void store_and_save_accessible_url_and_return_it() throws Exception {
+        var command = aCommand();
+        var expectedRescaledImageData = anImage();
+        var imageRescaleService = new FakeImageRescaleService(expectedRescaledImageData);
+        var expectedStoredImageUrl = "testingImageUrl";
+        var imageStorage = new FakeImageStorage(expectedStoredImageUrl);
+
+        var result = useCaseWith(imageRescaleService, imageStorage)
+                .apply(command);
+
+        assertThat(result.hasErrors())
+                .isFalse();
+        assertThat(imageStorage.storedImage())
+                .isNotNull()
+                .isEqualTo(
+                        expectedRescaledImageData
+                );
         assertThat(repository.findBy(command.id()))
                 .isNotNull()
                 .isEqualTo(
-                        aRescaleImageTaskWithImageUrl(expectedImageUrl)
+                        aRescaleImageTaskWithImageUrl(expectedStoredImageUrl)
                 );
+        assertThat(result.get())
+                .isEqualTo(expectedStoredImageUrl);
     }
 
     private RescaleImageCommand aCommand() throws IOException {
@@ -146,14 +177,18 @@ final class RescaleImageUseCaseShould {
     }
 
     private RescaleImage useCase() {
-        return new RescaleImageUseCase(repository, newsNowsClock, imageStorage);
+        return new RescaleImageUseCase(imageRescaleService, repository, newsNowsClock, imageStorage);
     }
 
     private RescaleImage useCaseWith(NewsNowClock newsNowClock) {
-        return new RescaleImageUseCase(repository, newsNowClock, imageStorage);
+        return new RescaleImageUseCase(imageRescaleService, repository, newsNowClock, imageStorage);
     }
 
     private RescaleImage useCaseWith(ImageStorage imageStorage) {
-        return new RescaleImageUseCase(repository, newsNowsClock, imageStorage);
+        return new RescaleImageUseCase(imageRescaleService, repository, newsNowsClock, imageStorage);
+    }
+
+    private RescaleImage useCaseWith(ImageRescaleService imageRescaleService, ImageStorage imageStorage) {
+        return new RescaleImageUseCase(imageRescaleService, repository, newsNowsClock, imageStorage);
     }
 }

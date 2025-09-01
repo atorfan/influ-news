@@ -8,6 +8,6 @@ final class AwsImageStorage implements ImageStorage {
 
     @Override
     public String store(String filename, byte[] imageData) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
