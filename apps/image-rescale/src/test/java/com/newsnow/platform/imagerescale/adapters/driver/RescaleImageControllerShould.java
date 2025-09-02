@@ -12,7 +12,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.UUID;
 
-import static helpers.ImageCreationHelperForTest.createImageWithSize;
+import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.HEIGHT;
+import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.WIDTH;
+import static helpers.ImageContentMother.anImage;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,9 +30,9 @@ final class RescaleImageControllerShould {
     @Test
     void resize_image_and_retrieve_accessible_url() throws Exception {
         var taskId = UUID.randomUUID();
-        var image = createImageWithSize(800, 600);
+        var image = anImage();
 
-        requestRescaleFor(taskId, image, 400, 300)
+        requestRescaleFor(taskId, image, WIDTH, HEIGHT)
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.accessibleImageUrl").value(TestConfiguration.TEST_IMAGE_PATH));

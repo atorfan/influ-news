@@ -4,20 +4,22 @@ import com.newsnow.platform.imagerescale.core.domain.RescaleImageTask;
 import com.newsnow.platform.imagerescale.core.ports.spi.RescaleImageTaskRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
 public final class InMemoryRescaleImageTaskRepository implements RescaleImageTaskRepository {
 
-    private RescaleImageTask savedTask;
+    private final Map<String, RescaleImageTask> savedTasks = new HashMap<>();
 
     @Override
     public RescaleImageTask findBy(final UUID taskId) {
-        return savedTask;
+        return savedTasks.get(taskId.toString());
     }
 
     @Override
     public void save(RescaleImageTask task) {
-        this.savedTask = task;
+        this.savedTasks.put(task.id().toString(), task);
     }
 }

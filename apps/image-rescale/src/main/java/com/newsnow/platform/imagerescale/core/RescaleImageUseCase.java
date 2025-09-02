@@ -7,28 +7,28 @@ import com.newsnow.platform.imagerescale.core.ports.api.RescaleImage;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImageCommand;
 import com.newsnow.platform.imagerescale.core.ports.api.UseCaseResult;
 import com.newsnow.platform.imagerescale.core.ports.spi.ImageRescaleService;
+import com.newsnow.platform.imagerescale.core.ports.spi.ImageStorage;
 import com.newsnow.platform.imagerescale.core.ports.spi.NewsNowClock;
 import com.newsnow.platform.imagerescale.core.ports.spi.RescaleImageTaskRepository;
-import com.newsnow.platform.imagerescale.core.ports.spi.ImageStorage;
 
 @UseCase
 public final class RescaleImageUseCase implements RescaleImage {
 
     private final ImageRescaleService imageRescaleService;
-    private final RescaleImageTaskRepository repository;
-    private final NewsNowClock clock;
     private final ImageStorage imageStorage;
+    private final NewsNowClock clock;
+    private final RescaleImageTaskRepository repository;
 
     public RescaleImageUseCase(
             ImageRescaleService imageRescaleService,
-            RescaleImageTaskRepository repository,
+            ImageStorage imageStorage,
             NewsNowClock clock,
-            ImageStorage imageStorage
+            RescaleImageTaskRepository repository
     ) {
         this.imageRescaleService = imageRescaleService;
-        this.repository = repository;
-        this.clock = clock;
         this.imageStorage = imageStorage;
+        this.clock = clock;
+        this.repository = repository;
     }
 
     @Override
