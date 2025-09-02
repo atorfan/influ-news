@@ -48,7 +48,7 @@ final class RescaleImageUseCaseShould {
     void setUp() throws IOException {
         taskId = UUID.randomUUID();
         expectedRescaledImageData = aRescaledImage();
-        expectedStoredImageUrl = taskId.toString().concat(".jpg");
+        expectedStoredImageUrl = taskId.toString().concat(".png");
         expectedTimestamp = LocalDateTime.now();
 
         imageRescaleService = new FakeImageRescaleService(expectedRescaledImageData);

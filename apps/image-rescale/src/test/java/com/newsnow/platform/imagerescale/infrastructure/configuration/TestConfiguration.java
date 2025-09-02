@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestConfiguration {
 
-    public static final String TEST_IMAGE_PATH = "/images/test.jpg";
+    public static final String TEST_IMAGE_PATH = "/images/test.png";
 
     @Bean
     RescaleImage rescaleImageUseCase() {

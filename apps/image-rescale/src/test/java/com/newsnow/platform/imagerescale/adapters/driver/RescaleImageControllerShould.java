@@ -47,8 +47,8 @@ final class RescaleImageControllerShould {
 
         var imageFile = new MockMultipartFile(
                 "image",
-                "test.jpg",
-                "image/jpeg",
+                "test.png",
+                "image/png",
                 image
         );
         return mockMvc.perform(multipart("/task")
