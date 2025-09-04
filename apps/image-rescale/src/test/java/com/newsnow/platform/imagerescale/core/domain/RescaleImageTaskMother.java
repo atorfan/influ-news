@@ -19,6 +19,16 @@ public final class RescaleImageTaskMother {
     private RescaleImageTaskMother() {
     }
 
+    public static RescaleImageTask aRescaleImageTask() {
+        return new RescaleImageTask(
+                TASK_ID,
+                CREATED_AT,
+                new ImageHash(ORIGINAL_IMAGE_HASH),
+                anImageResolutionWith(WIDTH, HEIGHT),
+                IMAGE_URL
+        );
+    }
+
     public static RescaleImageTask aRescaleImageTaskWith(
             UUID id,
             LocalDateTime createdAt,

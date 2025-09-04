@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface FindRescaleImageTask {
 
-    RescaleImageTask apply(UUID taskId);
+    UseCaseResult<RescaleImageTask> apply(UUID taskId);
 }
