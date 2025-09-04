@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.HEIGHT;
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.WIDTH;
+import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.TEST_IMAGE_PATH;
 import static helpers.ImageContentMother.anImage;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -35,7 +36,7 @@ final class RescaleImageControllerShould {
         requestRescaleFor(taskId, image, WIDTH, HEIGHT)
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.accessibleImageUrl").value(TestConfiguration.TEST_IMAGE_PATH));
+                .andExpect(jsonPath("$.accessibleImageUrl").value(TEST_IMAGE_PATH));
     }
 
     private ResultActions requestRescaleFor(

@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.TEST_IMAGE_PATH;
+
 @Configuration
 public class TestConfiguration {
-
-    public static final String TEST_IMAGE_PATH = "/images/test.png";
 
     @Bean
     @ConditionalOnMissingBean

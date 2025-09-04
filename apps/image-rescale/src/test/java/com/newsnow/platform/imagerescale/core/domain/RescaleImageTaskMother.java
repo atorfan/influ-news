@@ -7,6 +7,8 @@ import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMothe
 
 public final class RescaleImageTaskMother {
 
+    public static final String TEST_IMAGE_PATH = "/images/test.png";
+
     private RescaleImageTaskMother() {
     }
 
