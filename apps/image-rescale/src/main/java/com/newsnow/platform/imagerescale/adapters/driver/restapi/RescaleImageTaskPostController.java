@@ -1,4 +1,4 @@
-package com.newsnow.platform.imagerescale.adapters.driver;
+package com.newsnow.platform.imagerescale.adapters.driver.restapi;
 
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImage;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImageCommand;

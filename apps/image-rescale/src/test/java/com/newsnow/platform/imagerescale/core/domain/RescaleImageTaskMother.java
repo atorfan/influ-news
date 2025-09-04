@@ -1,5 +1,7 @@
 package com.newsnow.platform.imagerescale.core.domain;
 
+import helpers.ImageContentMother;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -7,7 +9,12 @@ import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMothe
 
 public final class RescaleImageTaskMother {
 
-    public static final String TEST_IMAGE_PATH = "/images/test.png";
+    public static final UUID TASK_ID = UUID.randomUUID();
+    public static final LocalDateTime CREATED_AT = LocalDateTime.now();
+    public static final String ORIGINAL_IMAGE_HASH = ImageContentMother.IMAGE_HASH;
+    public static final int WIDTH = ImageResolutionMother.WIDTH;
+    public static final int HEIGHT = ImageResolutionMother.HEIGHT;
+    public static final String IMAGE_URL = "/images/test.png";
 
     private RescaleImageTaskMother() {
     }

@@ -1,5 +1,6 @@
-package com.newsnow.platform.imagerescale.adapters.driver;
+package com.newsnow.platform.imagerescale.adapters.driver.restapi;
 
+import com.newsnow.platform.imagerescale.adapters.driver.restapi.RescaleImageTaskPostController;
 import com.newsnow.platform.imagerescale.infrastructure.configuration.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.HEIGHT;
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.WIDTH;
-import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.TEST_IMAGE_PATH;
+import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.IMAGE_URL;
 import static helpers.ImageContentMother.anImage;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,7 +37,7 @@ final class RescaleImageTaskPostControllerShould {
         requestRescaleFor(taskId, image, WIDTH, HEIGHT)
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.accessibleImageUrl").value(TEST_IMAGE_PATH));
+                .andExpect(jsonPath("$.accessibleImageUrl").value(IMAGE_URL));
     }
 
     private ResultActions requestRescaleFor(

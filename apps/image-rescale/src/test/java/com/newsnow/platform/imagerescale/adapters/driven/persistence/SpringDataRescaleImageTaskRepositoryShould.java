@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.HEIGHT;
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.WIDTH;
-import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.TEST_IMAGE_PATH;
+import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.IMAGE_URL;
 import static helpers.ImageContentMother.IMAGE_HASH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,7 +30,7 @@ class SpringDataRescaleImageTaskRepositoryShould {
                 IMAGE_HASH,
                 WIDTH,
                 HEIGHT,
-                TEST_IMAGE_PATH
+                IMAGE_URL
         );
         rescaleImageTaskRepository.save(entityToSave);
 

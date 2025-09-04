@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
 @Mapper(componentModel = SPRING)
-public interface RescaleImageTaskMapper {
+public interface RescaleImageTaskJpaMapper {
 
     @Mapping(target = "originalImageHash.value", source = "originalImageHash")
     @Mapping(target = "appliedResolution.width", source = "width")

@@ -10,9 +10,9 @@ import java.util.UUID;
 public class SpringDataRescaleImageTaskRepository implements RescaleImageTaskRepository {
 
     private final JpaRescaleImageTaskRepository jpaRepository;
-    private final RescaleImageTaskMapper mapper;
+    private final RescaleImageTaskJpaMapper mapper;
 
-    public SpringDataRescaleImageTaskRepository(JpaRescaleImageTaskRepository jpaRepository, RescaleImageTaskMapper mapper) {
+    public SpringDataRescaleImageTaskRepository(JpaRescaleImageTaskRepository jpaRepository, RescaleImageTaskJpaMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }
