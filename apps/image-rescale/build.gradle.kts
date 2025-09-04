@@ -2,6 +2,8 @@
 plugins {
     java
     application
+    id("org.springframework.boot") version "3.5.5"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 repositories {
@@ -17,23 +19,24 @@ dependencies {
     implementation("net.coobird:thumbnailator:0.4.+")
 
     // Database
-    implementation("org.postgresql:postgresql:42.7.+")
+    implementation("org.postgresql:postgresql")
 
     // SpringBoot
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.5.5"))
-    implementation("org.springframework.boot:spring-boot-starter-web:3.5.+")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.+")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // SpringBoot Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.+")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
 
     // Assertions Library
     testImplementation("org.assertj:assertj-core:3.27.+")
 
     // Testcontainers
-    testImplementation("org.testcontainers:testcontainers:1.21.+")
-    testImplementation("org.testcontainers:junit-jupiter:1.21.+")
-    testImplementation("org.testcontainers:postgresql:1.21.+")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:1.21.+"))
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
 
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.+")

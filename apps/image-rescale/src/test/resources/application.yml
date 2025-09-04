@@ -1,3 +1,12 @@
 spring:
-    main:
-        allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SECRET_DB_URL}
+    username: ${SECRET_DB_USERNAME}
+    password: ${SECRET_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true

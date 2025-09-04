@@ -1,4 +1,4 @@
-package com.newsnow.platform.imagerescale.adapters.driven;
+package com.newsnow.platform.imagerescale.adapters.driven.persistence;
 
 import com.newsnow.platform.imagerescale.core.domain.RescaleImageTask;
 import com.newsnow.platform.imagerescale.core.ports.spi.RescaleImageTaskRepository;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Repository
-public final class InMemoryRescaleImageTaskRepository implements RescaleImageTaskRepository {
+public class InMemoryRescaleImageTaskRepository implements RescaleImageTaskRepository {
 
     private final Map<String, RescaleImageTask> savedTasks = new HashMap<>();
 
