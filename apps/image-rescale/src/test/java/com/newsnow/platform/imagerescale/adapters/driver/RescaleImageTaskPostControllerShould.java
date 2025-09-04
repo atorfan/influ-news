@@ -21,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(RescaleImageController.class)
+@WebMvcTest(RescaleImageTaskPostController.class)
 @Import(TestConfiguration.class)
-final class RescaleImageControllerShould {
+final class RescaleImageTaskPostControllerShould {
 
     @Autowired
     private MockMvc mockMvc;

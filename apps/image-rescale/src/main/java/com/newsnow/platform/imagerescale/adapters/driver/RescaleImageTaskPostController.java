@@ -16,16 +16,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/task")
-final class RescaleImageController {
+final class RescaleImageTaskPostController {
 
     private final RescaleImage rescaleImage;
 
-    RescaleImageController(RescaleImage rescaleImage) {
+    RescaleImageTaskPostController(RescaleImage rescaleImage) {
         this.rescaleImage = rescaleImage;
     }
 
     @PostMapping
-    public ResponseEntity<RescaleImageResponse> perform(
+    public ResponseEntity<RescaleImageTaskUrlResponse> perform(
             @RequestParam("id") UUID id,
             @RequestParam("image") MultipartFile image,
             @RequestParam("width") int width,
@@ -37,6 +37,6 @@ final class RescaleImageController {
         var accessibleImageUrl = result.get();
 
         return ResponseEntity.created(new URI(""))
-                .body(new RescaleImageResponse(accessibleImageUrl));
+                .body(new RescaleImageTaskUrlResponse(accessibleImageUrl));
     }
 }
