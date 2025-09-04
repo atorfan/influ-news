@@ -24,8 +24,13 @@ final class RescaleImageTaskGetController {
     @GetMapping
     public ResponseEntity<RescaleImageTaskRestApiDto> perform(@PathVariable("taskId") UUID taskId) {
         var rescaleImageTask = findRescaleImageTask.apply(taskId);
+
+        if (rescaleImageTask.hasErrors()) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok(
-                mapper.toRestApiDto(rescaleImageTask)
+                mapper.toRestApiDto(rescaleImageTask.get())
         );
     }
 }

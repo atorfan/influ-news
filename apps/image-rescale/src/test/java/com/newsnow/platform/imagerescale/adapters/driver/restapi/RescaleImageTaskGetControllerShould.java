@@ -45,6 +45,14 @@ final class RescaleImageTaskGetControllerShould {
         ;
     }
 
+    @Test
+    void not_found() throws Exception {
+        var taskId = UUID.randomUUID();
+        requestRescaleImageTaskFor(taskId)
+                .andExpect(status().isNotFound())
+        ;
+    }
+
     private ResultActions requestRescaleImageTaskFor(UUID taskId) throws Exception {
         return mockMvc.perform(
                 get("/task/{taskId}", taskId.toString())
