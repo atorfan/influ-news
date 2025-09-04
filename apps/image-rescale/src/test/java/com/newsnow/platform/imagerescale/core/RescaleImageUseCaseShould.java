@@ -1,6 +1,6 @@
 package com.newsnow.platform.imagerescale.core;
 
-import com.newsnow.platform.imagerescale.adapters.driven.InMemoryRescaleImageTaskRepository;
+import com.newsnow.platform.imagerescale.adapters.driven.persistence.InMemoryRescaleImageTaskRepository;
 import com.newsnow.platform.imagerescale.core.domain.ImageHash;
 import com.newsnow.platform.imagerescale.core.domain.ImageResolution;
 import com.newsnow.platform.imagerescale.core.ports.api.RescaleImage;

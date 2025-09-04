@@ -21,6 +21,10 @@ dependencies {
     // Database
     implementation("org.postgresql:postgresql")
 
+    // MapStruct
+    implementation("org.mapstruct:mapstruct:1.6.+")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.+")
+
     // SpringBoot
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
