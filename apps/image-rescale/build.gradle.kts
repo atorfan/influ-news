@@ -11,6 +11,13 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("org.testcontainers:testcontainers-bom:1.21.+")
+        mavenBom("io.awspring.cloud:spring-cloud-aws-dependencies:3.4.+")
+    }
+}
+
 dependencies {
     // Vavr with Either
     implementation("io.vavr:vavr:0.10.+")
@@ -29,18 +36,22 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // Spring + AWS S3
+    implementation("io.awspring.cloud:spring-cloud-aws-autoconfigure")
+    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3")
+    testImplementation("io.awspring.cloud:spring-cloud-aws-testcontainers")
+
     // SpringBoot Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-testcontainers")
 
     // Assertions Library
     testImplementation("org.assertj:assertj-core:3.27.+")
 
     // Testcontainers
-    testImplementation(platform("org.testcontainers:testcontainers-bom:1.21.+"))
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:localstack")
 
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.+")

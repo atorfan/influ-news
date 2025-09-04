@@ -1,11 +1,12 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${SECRET_DB_URL}
-    username: ${SECRET_DB_USERNAME}
-    password: ${SECRET_DB_PASSWORD}
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:17.6:///influ-news?TC_REUSABLE=true
+    hikari:
+      username: admin
+      password: pass
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     defer-datasource-initialization: true

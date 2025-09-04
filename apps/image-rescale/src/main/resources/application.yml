@@ -4,12 +4,28 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${SECRET_DB_URL:jdbc:postgresql://localhost:5432/influ-news}
-    username: ${SECRET_DB_USERNAME:postgres}
-    password: ${SECRET_DB_PASSWORD:admin}
+    url: ${SECRET_DB_URL}
+    username: ${SECRET_DB_USERNAME}
+    password: ${SECRET_DB_PASSWORD}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      s3:
+        endpoint: ${AWS_ENDPOINT}
+        region: ${AWS_REGION}
+      region:
+        static: ${AWS_REGION}
+
+app:
+  images:
+    storage:
+      bucket-name: ${RESCALED_IMAGES_BUCKET}
 
 server:
   port: 8080
