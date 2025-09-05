@@ -21,10 +21,13 @@ public class RescaleImageTaskJpaEntity implements Serializable {
     @Id
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "original_image_hash")
     private String originalImageHash;
     private int width;
     private int height;
+    @Column(name = "image_url")
     private String imageUrl;
 
     public RescaleImageTaskJpaEntity() {
