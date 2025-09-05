@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Imagen - Task API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            transition: transform 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input[readonly] {
+            background: rgba(240, 240, 240, 0.8);
+            cursor: not-allowed;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            background: rgba(102, 126, 234, 0.05);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-wrapper:hover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.1);
+            transform: scale(1.02);
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        .file-input-text {
+            color: #667eea;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .file-selected {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .preview-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .dimensions-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .endpoint-info {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .endpoint-info code {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .response-area {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .uuid-info {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>📸 Subir Imagen</h1>
+
+    <div class="endpoint-info">
+        <strong>Endpoint:</strong> <code>POST http://localhost:8080/task</code>
+    </div>
+
+    <form id="imageForm">
+        <div class="form-group">
+            <label for="taskId">ID de Tarea</label>
+            <input type="text" id="taskId" name="id" required readonly>
+            <div class="uuid-info">🔄 Se genera automáticamente</div>
+        </div>
+
+        <div class="form-group">
+            <div class="dimensions-group">
+                <div>
+                    <label for="width">Ancho (px)</label>
+                    <input type="number" id="width" name="width" value="400" min="1" max="5000" required>
+                </div>
+                <div>
+                    <label for="height">Alto (px)</label>
+                    <input type="number" id="height" name="height" value="300" min="1" max="5000" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Imagen</label>
+            <div class="file-input-wrapper" onclick="document.getElementById('imageFile').click()">
+                <input type="file" id="imageFile" name="image" accept="image/*" required>
+                <div class="file-input-text">
+                    🖼️ Haz clic para seleccionar una imagen<br>
+                    <small>JPG, PNG, GIF, WebP</small>
+                </div>
+            </div>
+            <div class="preview-container" id="previewContainer"></div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            <span id="btnText">Subir Imagen</span>
+            <span id="btnLoading" class="loading" style="display: none;"></span>
+        </button>
+    </form>
+
+    <div id="responseArea" class="response-area">
+        <h3>Respuesta del servidor:</h3>
+        <pre id="responseContent"></pre>
+    </div>
+</div>
+
+<script>
+  // Función para generar UUID v4
+  function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  // Generar UUID al cargar la página
+  document.getElementById('taskId').value = generateUUID();
+
+  const imageFile = document.getElementById('imageFile');
+  const previewContainer = document.getElementById('previewContainer');
+  const form = document.getElementById('imageForm');
+  const responseArea = document.getElementById('responseArea');
+  const responseContent = document.getElementById('responseContent');
+  const btnText = document.getElementById('btnText');
+  const btnLoading = document.getElementById('btnLoading');
+  const submitBtn = document.querySelector('.submit-btn');
+
+  // Vista previa de imagen
+  imageFile.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      // Mostrar vista previa
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewContainer.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Vista previa">`;
+      };
+      reader.readAsDataURL(file);
+
+      // Actualizar texto del input SIN reemplazar el elemento
+      const wrapper = document.querySelector('.file-input-wrapper');
+      const existingInput = wrapper.querySelector('input[type="file"]');
+      wrapper.innerHTML = `
+                    <div class="file-selected">✅ ${file.name}</div>
+                `;
+      // Volver a insertar el input original
+      wrapper.appendChild(existingInput);
+
+      // Generar nuevo UUID después de cambiar de imagen
+      document.getElementById('taskId').value = generateUUID();
+
+      console.log('File selected:', file.name); // Debug
+    }
+  });
+
+  // Envío del formulario
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    console.log('Form submitted!'); // Debug
+
+    const formData = new FormData();
+    const file = document.getElementById('imageFile').files[0];
+    const id = document.getElementById('taskId').value;
+    const width = document.getElementById('width').value;
+    const height = document.getElementById('height').value;
+
+    console.log('Form data:', { file: file?.name, id, width, height }); // Debug
+
+    if (!file) {
+      alert('Por favor selecciona una imagen');
+      return;
+    }
+
+    // Mostrar loading
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline-block';
+    submitBtn.disabled = true;
+
+    // Preparar FormData
+    formData.append('image', file);
+
+    // Construir URL con parámetros
+    const url = `http://localhost:8080/task?id=${encodeURIComponent(id)}&width=${width}&height=${height}`;
+    console.log('Request URL:', url); // Debug
+
+    try {
+      console.log('Making fetch request...'); // Debug
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+      });
+
+      console.log('Response received:', response.status, response.statusText); // Debug
+      const result = await response.text();
+      console.log('Response body:', result); // Debug
+
+      const apiResponse = JSON.parse(result);
+
+      // Mostrar respuesta
+      responseContent.innerHTML = `Status: ${response.status} ${response.statusText}\n\n<a href="${apiResponse.accessibleImageUrl}" target="_blank">Ver imagen reescalada</a>`;
+      responseArea.style.display = 'block';
+      responseArea.scrollIntoView({ behavior: 'smooth' });
+
+      if (response.ok) {
+        responseContent.style.color = '#28a745';
+      } else {
+        responseContent.style.color = '#dc3545';
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error); // Debug
+      responseContent.textContent = `Error: ${error.message}`;
+      responseContent.style.color = '#dc3545';
+      responseArea.style.display = 'block';
+      responseArea.scrollIntoView({ behavior: 'smooth' });
+    } finally {
+      // Ocultar loading
+      btnText.style.display = 'inline';
+      btnLoading.style.display = 'none';
+      submitBtn.disabled = false;
+    }
+  });
+
+  // Añadir event listener al botón directamente también
+  submitBtn.addEventListener('click', function(e) {
+    console.log('Button clicked directly!'); // Debug
+    e.preventDefault();
+
+    // Trigger form submission manually
+    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+    form.dispatchEvent(submitEvent);
+  });
+
+  console.log('All event listeners attached'); // Debug
+</script>
+</body>
+</html>
