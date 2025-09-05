@@ -10,5 +10,6 @@ record RescaleImageTaskRestApiDto(
         int width,
         int height,
         String imageUrl
-) {
+)
+        implements RestApiResponse {
 }

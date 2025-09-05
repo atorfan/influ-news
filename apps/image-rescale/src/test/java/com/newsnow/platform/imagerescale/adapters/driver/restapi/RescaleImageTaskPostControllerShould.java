@@ -11,11 +11,14 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.HEIGHT;
 import static com.newsnow.platform.imagerescale.core.domain.ImageResolutionMother.WIDTH;
 import static com.newsnow.platform.imagerescale.core.domain.RescaleImageTaskMother.IMAGE_URL;
+import static com.newsnow.platform.imagerescale.infrastructure.configuration.TestConfiguration.IMAGE_DATA_ERROR;
+import static helpers.ImageContentMother.aTruncatedImage;
 import static helpers.ImageContentMother.anImage;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -37,7 +40,19 @@ final class RescaleImageTaskPostControllerShould {
         requestRescaleFor(taskId, image, WIDTH, HEIGHT)
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.accessibleImageUrl").value(IMAGE_URL));
+                .andExpect(jsonPath("$.accessibleImageUrl").value(IMAGE_URL))
+        ;
+    }
+
+    @Test
+    void not_process_the_request() throws Exception {
+        var taskId = UUID.randomUUID();
+
+        requestRescaleFor(taskId, IMAGE_DATA_ERROR, WIDTH, HEIGHT)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+        ;
     }
 
     private ResultActions requestRescaleFor(

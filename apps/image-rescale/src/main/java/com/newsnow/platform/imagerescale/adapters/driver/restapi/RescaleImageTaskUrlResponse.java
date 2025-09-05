@@ -1,4 +1,4 @@
 package com.newsnow.platform.imagerescale.adapters.driver.restapi;
 
-record RescaleImageTaskUrlResponse(String accessibleImageUrl) {
+record RescaleImageTaskUrlResponse(String accessibleImageUrl) implements RestApiResponse {
 }

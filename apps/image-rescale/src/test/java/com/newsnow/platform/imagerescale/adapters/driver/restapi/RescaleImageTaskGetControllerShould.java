@@ -50,6 +50,8 @@ final class RescaleImageTaskGetControllerShould {
         var taskId = UUID.randomUUID();
         requestRescaleImageTaskFor(taskId)
                 .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
         ;
     }
 

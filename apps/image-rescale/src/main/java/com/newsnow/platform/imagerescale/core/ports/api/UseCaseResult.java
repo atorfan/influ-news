@@ -4,6 +4,7 @@ import io.vavr.control.Either;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class UseCaseResult<T> {
 
@@ -27,5 +28,11 @@ public final class UseCaseResult<T> {
 
     public T get() {
         return value.get();
+    }
+
+    public void consumeErrors(Consumer<String> errorConsumer) {
+        if (!value.isLeft()) return;
+
+        value.getLeft().forEach(errorConsumer);
     }
 }
