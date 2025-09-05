@@ -2,6 +2,10 @@ spring:
   profiles:
     active: dev
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${SECRET_DB_URL}
@@ -35,3 +39,10 @@ app:
 server:
   port: 8080
 
+
+---
+spring:
+  config.activate.on-profile: dev
+
+app:
+  http.cors.allowed-origins: "*"

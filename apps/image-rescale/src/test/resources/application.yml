@@ -8,3 +8,5 @@ spring:
   flyway:
     baselineOnMigrate: true
 
+app:
+  http.cors.allowed-origins: "*"
