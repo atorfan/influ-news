@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  local-aws:
+    build:
+      context: ../../../
+      dockerfile: etc/docker/localstack/aws
+    container_name: "local-aws"
+    ports:
+      - "4566:4566"
+    env_file:
+      - ../../../.env
+    environment:
+      - SERVICES=s3
+      - PERSISTENCE=1
+      - LOCALSTACK_HOST=local-aws
+    volumes:
+      - "aws_localstack:/var/lib/localstack"
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: '[ -f /tmp/localstack_is_ready ]'
+      interval: 10s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  aws_localstack:
+    driver: local

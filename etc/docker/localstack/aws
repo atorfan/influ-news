@@ -1,0 +1,3 @@
+FROM localstack/localstack:3.4
+COPY --chown=localstack ./etc/docker/localstack/scripts/init.sh /etc/localstack/init/ready.d/init.sh
+RUN chmod u+x /etc/localstack/init/ready.d/init.sh
