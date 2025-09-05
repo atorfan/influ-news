@@ -99,7 +99,7 @@ final class RescaleImageUseCaseShould {
     @DisplayName("Store the image and return his accessible URL")
     void store_image_and_return_his_accessible_url() throws Exception {
         var command = aCommand();
-        var expectedFilename = aCommand().id().toString();
+        var expectedFilename = aCommand().id().toString().concat(".png");
 
         var result = useCase()
                 .apply(command);

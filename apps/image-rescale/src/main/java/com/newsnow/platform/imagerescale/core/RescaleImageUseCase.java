@@ -38,7 +38,7 @@ public final class RescaleImageUseCase implements RescaleImage {
             var desiredResolution = new ImageResolution(command.targetImageWidth(), command.targetImageHeight());
             byte[] rescaledImageData = imageRescaleService.rescale(originalImageData, desiredResolution);
 
-            var imageFilename = command.id().toString();
+            var imageFilename = command.id().toString().concat(".png");
             var accessibleImageUrl = imageStorage.store(imageFilename, rescaledImageData);
 
             var task = new RescaleImageTask(
