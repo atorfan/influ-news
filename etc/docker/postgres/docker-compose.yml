@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  database:
+    image: "postgres:17-alpine"
+    container_name: "influ-news-pgsql"
+    environment:
+      POSTGRES_DB: influ-news
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgsql-data:/var/lib/postgresql/data
+
+volumes:
+  pgsql-data:
+    driver: local
