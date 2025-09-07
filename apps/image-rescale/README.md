@@ -137,6 +137,18 @@ make integration-tests    # Test external integrations
 make tests                # Complete test suite
 ```
 
+## Testing with Swagger UI
+
+You can read the documentation of the REST API and test it directly from the Swagger UI available at:
+
+http://localhost:8080/swagger-ui/index.html
+
+## Testing with Web UI
+
+Also, a simple static frontend application is available to test the image rescale service in a more user-friendly way.
+
+You'll need the service running (locally or in a docker container). Then, just open [this HTML file](./uploader.html) in a browser and start interacting.
+
 ## Environment Configuration
 
 The application supports multiple environments through profiles:
@@ -176,9 +188,3 @@ make dk-rmi               # Remove Docker images
   - `etc/docker/docker-compose.dev.yml`
   - `etc/docker/image-rescale/docker-compose.dev.yml`
 - **Environment**: `.env`, `.env.dev`, `.env-sample` files
-
-## Testing with UI
-
-We can use a simple static frontend application to test the image rescale service in a more user-friendly way.
-
-You'll need the service running (locally or in a docker container). Then, just open [this HTML file](./uploader.html) in a browser and start interacting.

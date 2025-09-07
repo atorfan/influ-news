@@ -1,6 +1,11 @@
 package com.newsnow.platform.imagerescale.adapters.driver.restapi;
 
 import com.newsnow.platform.imagerescale.core.ports.api.FindRescaleImageTask;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +31,28 @@ final class RescaleImageTaskGetController {
         this.mapper = mapper;
     }
 
-    @GetMapping
+    @Tag(name = "Find Rescale Image Task")
+    @Operation(
+            summary = "Retrieve a rescale image task",
+            description = "Endpoint to retrieve an existing rescale image task with its information saved in the system"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Success loading the image task",
+            content = @Content(schema = @Schema(
+                    type = "object",
+                    implementation = RescaleImageTaskRestApiDto.class
+            ))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Failed loading the image task",
+            content = @Content(schema = @Schema(
+                    type = "object",
+                    implementation = RestApiErrorMessageResponse.class
+            ))
+    )
+    @GetMapping(produces = "application/json")
     public ResponseEntity<RestApiResponse> perform(@PathVariable("taskId") UUID taskId) {
         var findRescaleImageTaskResult = findRescaleImageTask.apply(taskId);
 

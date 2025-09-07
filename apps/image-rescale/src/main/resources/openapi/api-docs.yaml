@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  title: Rescale images service API
+  description: API endpoints for rescale images and obtain its information
+  version: v1
+servers:
+- url: http://localhost:8080
+  description: Local server
+paths:
+  /task:
+    post:
+      tags:
+      - Rescale Image Task
+      summary: Rescale images and save its information
+      description: "Endpoint to rescale images and save both, the image and the task with its information in the system"
+      operationId: rescale_image
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: width
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: height
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+              required:
+              - image
+      responses:
+        "201":
+          description: "Success uploading, rescaling and storing the image, then saving its task information"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/RescaleImageTaskUrlResponse"
+        "422":
+          description: Failed uploading or rescaling or storing the image or even saving its task information
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/RestApiErrorMessageResponse"
+  /task/{taskId}:
+    get:
+      tags:
+      - Find Rescale Image Task
+      summary: Retrieve a rescale image task
+      description: Endpoint to retrieve an existing rescale image task with its information saved in the system
+      operationId: find_rescale_image_task
+      parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success loading the image task
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/RescaleImageTaskRestApiDto"
+        "404":
+          description: Failed loading the image task
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/RestApiErrorMessageResponse"
+components:
+  schemas:
+    RescaleImageTaskUrlResponse:
+      type: object
+      properties:
+        accessibleImageUrl:
+          type: string
+    RestApiErrorMessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    RescaleImageTaskRestApiDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        originalImageHash:
+          type: string
+        width:
+          type: integer
+          format: int32
+        height:
+          type: integer
+          format: int32
+        imageUrl:
+          type: string

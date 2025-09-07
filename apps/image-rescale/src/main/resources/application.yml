@@ -44,5 +44,10 @@ server:
 spring:
   config.activate.on-profile: dev
 
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: true
+
 app:
   http.cors.allowed-origins: "*"
