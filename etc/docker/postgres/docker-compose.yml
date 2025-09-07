@@ -12,7 +12,13 @@ services:
       - "5432:5432"
     volumes:
       - pgsql-data:/var/lib/postgresql/data
+    networks:
+      - newsnow_network
 
 volumes:
   pgsql-data:
     driver: local
+
+networks:
+  newsnow_network:
+    external: true

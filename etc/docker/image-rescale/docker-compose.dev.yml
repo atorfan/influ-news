@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  project:
+    dns:
+      # Set the DNS server to be the LocalStack container
+      - 172.16.1.2

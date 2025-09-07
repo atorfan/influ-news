@@ -1,0 +1,4 @@
+version: '3.8'
+services:
+  project:
+    image: "${IMAGE_URL}:${IMAGE_VERSION}"

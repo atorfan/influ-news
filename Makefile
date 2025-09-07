@@ -14,7 +14,6 @@ NO_COLOUR := 	\033[0m
 
 MONOREPO_NAME := influ-news
 AWS_LOCALSTACK_CONTAINER_NAME := local-aws
-AWS_LOCALSTACK_S3_BUCKET_NAME := rescaled-images
 
 MSG_SEPARATOR := "*********************************************************************"
 MSG_IDENT := "    "
@@ -24,6 +23,8 @@ MSG_IDENT := "    "
 
 help:
 	echo "\n${MSG_SEPARATOR}\n$(LIGHT_VIOLET)$(MONOREPO_NAME)$(NO_COLOUR)\n${MSG_SEPARATOR}\n"
+	echo "${MSG_IDENT}=======   ✨  BASIC   =====================================\n   "
+	echo "${MSG_IDENT}  init                    -  Copy needed .env files from .env-sample if they don't exist"
 	echo
 	echo "${MSG_IDENT}=======   🐳  AWS LocalStack - DOCKER   =====================================\n"
 	echo "${MSG_IDENT}  ℹ️   To work with $(MONOREPO_NAME) using AWS LocalStack"
@@ -33,6 +34,12 @@ help:
 	echo "${MSG_IDENT}  localstack-down         -  🛑  Stop container ${AWS_LOCALSTACK_CONTAINER_NAME}"
 	echo "${MSG_IDENT}  localstack-init         -  🚀  Create initial configurations ${AWS_LOCALSTACK_CONTAINER_NAME}"
 	echo
+
+init:
+	if [ ! -f .env ]; then \
+		cp "${ROOT_DIR}/.env-sample" "${ROOT_DIR}/.env" ; \
+		echo "${LIGHT_VIOLET}CREATED - File .env in root project:${NO_COLOUR}"; \
+	fi
 
 ######################################################################
 ########################   🐳 DOCKER    ##############################
@@ -51,7 +58,3 @@ localstack-up:
 localstack-down:
 	echo "\n\n${MSG_SEPARATOR}\n\n 🐳 localstack-down => 🛑 Stop container ${AWS_LOCALSTACK_CONTAINER_NAME} \n\n${MSG_SEPARATOR}\n\n"
 	docker compose -f "${ROOT_DIR}/etc/docker/localstack/docker-compose.yml" down --remove-orphans
-
-localstack-init:
-	echo "\n\n${MSG_SEPARATOR}\n\n Creating S3 Bucket \"${AWS_LOCALSTACK_S3_BUCKET_NAME}\" \n\n${MSG_SEPARATOR}\n\n"
-	docker exec local-aws awslocal s3 mb s3://${AWS_LOCALSTACK_S3_BUCKET_NAME}

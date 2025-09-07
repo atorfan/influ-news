@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  project:
+    container_name: "${APP_NAME}"
+    build:
+      context: ../../
+      dockerfile: etc/docker/${APP_NAME}/Dockerfile
+    ports:
+      - "8080:8080"
+    restart: on-failure

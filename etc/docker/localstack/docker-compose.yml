@@ -11,9 +11,11 @@ services:
     env_file:
       - ../../../.env
     environment:
+      - DEBUG=${DEBUG:-0}
       - SERVICES=s3
       - PERSISTENCE=1
       - LOCALSTACK_HOST=local-aws
+#      - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - "aws_localstack:/var/lib/localstack"
       - /var/run/docker.sock:/var/run/docker.sock
@@ -22,7 +24,21 @@ services:
       interval: 10s
       timeout: 3s
       retries: 30
+    networks:
+      newsnow_network:
+        # Set the container IP address in the 172.16.1.0/24 subnet
+        ipv4_address: 172.16.1.2
 
 volumes:
   aws_localstack:
     driver: local
+
+networks:
+  newsnow_network:
+    external: false
+    name: newsnow_network
+    ipam:
+      driver: default
+      config:
+        # Define a custom subnet for the network
+        - subnet: 172.16.1.0/24
