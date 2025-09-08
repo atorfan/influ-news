@@ -1,0 +1,100 @@
+{
+	"info": {
+		"name": "Rescale images service API",
+		"description": "API endpoints for rescale images and obtain its information",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+	},
+	"item": [
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "Rescale images and save its information",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"description": "(Required) ",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/task?id={{taskId}}&width=400&height=300",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{taskId}}",
+									"description": "(Required) "
+								},
+								{
+									"key": "width",
+									"value": "400",
+									"description": "(Required) "
+								},
+								{
+									"key": "height",
+									"value": "300",
+									"description": "(Required) "
+								}
+							]
+						},
+						"description": "Endpoint to rescale images and save both, the image and the task with its information in the system"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a rescale image task",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/task/{{taskId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"task",
+								"{{taskId}}"
+							]
+						},
+						"description": "Endpoint to retrieve an existing rescale image task with its information saved in the system"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
