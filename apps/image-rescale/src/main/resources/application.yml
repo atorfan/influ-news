@@ -39,6 +39,23 @@ app:
 server:
   port: 8080
 
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+      base-path: /
+  endpoint:
+    health:
+      show-components: always
+  health:
+    defaults:
+      enabled: false
+    db:
+      enabled: true
 
 ---
 spring:
@@ -51,3 +68,19 @@ springdoc:
 
 app:
   http.cors.allowed-origins: "*"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, metrics
+
+---
+spring:
+  config.activate.on-profile: prod
+
+management:
+  endpoint:
+    health:
+      db:
+        enabled: true
