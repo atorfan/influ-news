@@ -18,56 +18,48 @@ You can check it at [apps/image-rescale](apps/image-rescale) folder.
 
 # Development Setup and Commands
 
-This section provides a comprehensive guide to running, testing, and working with the applications in this monorepo using the provided Makefiles.
+This repository follows a monorepo structure, and each application has its own documentation to provide a
+comprehensive guide to running, testing, and working with the application using the provided Makefiles.
 
-## Project Structure
-
-The repository follows a monorepo structure:
-- **Root Makefile**: Located at the project root, manages AWS LocalStack infrastructure (and could manage more in the future).
+- **Root Makefile**: Located at the project root, manages cross-infrastructure services (e.g.: AWS LocalStack).
 - **Application Makefile**: Located in `apps/${APP_NAME}/`, manages the application we want to develop.
 
-## Prerequisites
 
-### Root Project Requirements
-- Docker and Docker Compose
+## Root Project
 
-## Root Project Commands (Infrastructure)
+### Prerequisites
 
-The root Makefile manages AWS LocalStack for local development with AWS services.
+- Docker
+- Docker Compose
 
 ### Available Commands
 
 ```bash
 make help                 # Display all available commands with descriptions
 ```
-#### Project Initialization
-```bash
-make init                 # Copy .env files from samples if they don't exist
-```
-This creates:
-- `.env` in project root (if missing)
 
 ### AWS LocalStack Management
 
-```bash
-make localstack-build     # 📦 Build AWS LocalStack docker image
-make localstack-up        # 🚀 Start LocalStack container 'local-aws'
-make localstack-down      # 🛑 Stop LocalStack container 'local-aws'
-```
+A fully functional local AWS cloud stack allows us to test our application without having to create and configure AWS resources.
 
-### LocalStack Workflow
+You may need to have it running locally to run some services. These are the steps to follow:
 
-1. **Build the LocalStack image:**
+1. Root Project Initialization
    ```bash
-   make localstack-build
+   make init                 # Copy .env files from samples if they don't exist
    ```
 
-2. **Start LocalStack services:**
+2. Build the LocalStack image
    ```bash
-   make localstack-up
+   make localstack-build     # 📦 Build LocalStack docker image
    ```
 
-4. **Stop services when done:**
+3. Start LocalStack services
    ```bash
-   make localstack-down
+   make localstack-up        # 🚀 Start LocalStack container
+   ```
+
+4. Stop services when done
+   ```bash
+   make localstack-down      # 🛑 Stop LocalStack container
    ```

@@ -29,10 +29,9 @@ help:
 	echo "${MSG_IDENT}=======   🐳  AWS LocalStack - DOCKER   =====================================\n"
 	echo "${MSG_IDENT}  ℹ️   To work with $(MONOREPO_NAME) using AWS LocalStack"
 	echo "${MSG_IDENT}  ⚠️   Requirements : docker \n"
-	echo "${MSG_IDENT}  localstack-build 		-  📦  Build a AWS LocalStack docker image"
+	echo "${MSG_IDENT}  localstack-build        -  📦  Build docker image with name '${AWS_LOCALSTACK_CONTAINER_NAME}'"
 	echo "${MSG_IDENT}  localstack-up           -  🚀  Start container ${AWS_LOCALSTACK_CONTAINER_NAME}"
 	echo "${MSG_IDENT}  localstack-down         -  🛑  Stop container ${AWS_LOCALSTACK_CONTAINER_NAME}"
-	echo "${MSG_IDENT}  localstack-init         -  🚀  Create initial configurations ${AWS_LOCALSTACK_CONTAINER_NAME}"
 	echo
 
 init:
