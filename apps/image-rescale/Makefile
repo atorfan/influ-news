@@ -20,6 +20,8 @@ DOCKER_IMAGE_NAME := image-rescale
 PROJECT_NAME := image-rescale
 # Container registry where images will be registered (AWS, Azure...)
 IMAGE_URL := image-rescale
+AWS_LOCALSTACK_CONTAINER_NAME := local-aws
+POSTGRESQL_CONTAINER_NAME := influ-news-pgsql
 AWS_LOCALSTACK_S3_BUCKET_NAME := rescaled-images
 
 MSG_SEPARATOR := "*********************************************************************"
@@ -27,6 +29,9 @@ MSG_IDENT := "    "
 
 gradlew := ../../gradlew
 
+define CONTAINER_IS_RUNNING
+	$(shell echo $(shell docker inspect --format '{{json .State.Running}}' $(1) 2>/dev/null || echo "false") | tr -d '[:blank:]')
+endef
 
 .SILENT:
 
@@ -45,9 +50,11 @@ help:
 	echo "${MSG_IDENT}    ️                                  > make run ENV=staging"
 	echo
 	echo "${MSG_IDENT}=======   🐳  DOCKER   =====================================\n"
-	echq "${MSG_IDENT}  ℹ️   To work with $(PROJECT_NAME) running alone in a container"
+	echo "${MSG_IDENT}  ℹ️   To work with $(PROJECT_NAME) running alone in a container"
 	echo "${MSG_IDENT}  ⚠️   Requirements : docker \n"
-	echo "${MSG_IDENT}  dk-database-up          -  🐘  Build and starts a docker image with the database PostgreSQL"
+	echo "${MSG_IDENT}  localstack-init         -  🪣  Creates the S3 Bucket ${AWS_LOCALSTACK_S3_BUCKET_NAME} in LocalStack"
+	echo "${MSG_IDENT}  database-up             -  🐘  Build and starts a docker image with PostgreSQL database"
+	echo "${MSG_IDENT}  database-down           -  🐘  Stop the database PostgreSQL server"
 	echo "${MSG_IDENT}  dk-build                -  📦  Build a docker image with the .jar"
 	echo "${MSG_IDENT}  dk-build-skip-tests     -  📦  Build a docker image with the .jar (skipping tests)"
 	echo "${MSG_IDENT}  up                      -  🚀  Start container ${DOCKER_IMAGE_NAME}"
@@ -71,27 +78,48 @@ init:
 		echo "${LIGHT_VIOLET}CREATED - File .env.dev in project main:${NO_COLOUR}"; \
 	fi
 
+check-localstack:
+	$(eval isLocalStackRunning := $(call CONTAINER_IS_RUNNING, ${AWS_LOCALSTACK_CONTAINER_NAME}))
+	if [ $(isLocalStackRunning) == "false" ]; then \
+	    echo "${LIGHT_RED}LocalStack must be running for the application to work properly${NO_COLOUR}"; \
+	    exit 1; \
+	fi
 
-clean:
+check-database:
+	$(eval isPostgreSqlRunning := $(call CONTAINER_IS_RUNNING, ${POSTGRESQL_CONTAINER_NAME}))
+	if [ $(isPostgreSqlRunning) == "false" ]; then \
+	    echo "${LIGHT_RED}PostgreSQL must be running for the application to work properly${NO_COLOUR}"; \
+	    exit 1; \
+	fi
+
+clean: init
 	echo "\n\n${MSG_SEPARATOR}\n\n CLEAN => 🚮  Erase the 📁 build/\n\n${MSG_SEPARATOR}\n\n"
 	$(gradlew) clean
 
-build: init clean
+build: init
 	echo "\n\n${MSG_SEPARATOR}\n\n BUILD APPLICATION => 📦\n"
+	$(gradlew) bootJar test $(shell [ ! -z ${VERSION} ] && echo "-Pversion=${VERSION}")
+
+build-skip-tests: init
+	echo "\n\n${MSG_SEPARATOR}\n\n BUILD APPLICATION IGNORING TESTS => 📦\n"
 	$(gradlew) bootJar $(shell [ ! -z ${VERSION} ] && echo "-Pversion=${VERSION}")
 
 tests: unit-tests integration-tests
 
-unit-tests: clean
+unit-tests:
 	echo "\n\n${MSG_SEPARATOR}\n\n UNIT TESTS \n\n${MSG_SEPARATOR}\n"
 	$(gradlew) test --tests "com.newsnow.*.core.*"
 
-integration-tests: clean
+integration-tests:
 	echo "\n\n${MSG_SEPARATOR}\n\n INTEGRATION TESTS \n\n${MSG_SEPARATOR}\n"
 	$(gradlew) test --tests "com.newsnow.*.adapters.*" --tests "com.newsnow.*.infrastructure.*" --tests "com.newsnow.*.imagerescale"
 
-run: build
-	echo "\n\n${MSG_SEPARATOR}\n\n RUN => 🚀 Starting your ☕ app -> http://0.0.0.0:8080/\n\n${MSG_SEPARATOR}\n"
+run: check-localstack check-database
+	echo "\n\n${MSG_SEPARATOR}\n\n RUN => 🚀 Starting your ☕ app \n\n${MSG_SEPARATOR}\n"
+	echo "  - 🔍 Go to - http://localhost:8080/health"
+	echo "  - 📑 Documentation - http://localhost:8080/swagger-ui/index.html"
+	echo "\n${MSG_SEPARATOR}\n\n"
+
 	$(gradlew) bootRun -Dfile.encoding="UTF-8" -Dspring.profiles.active=dev
 
 
@@ -99,27 +127,26 @@ run: build
 ########################   🐳 DOCKER    ##############################
 ######################################################################
 
-dk-init:
-	echo "\n\n${MSG_SEPARATOR}\n\n Preparing the needed resources to run the application successfully \n\n${MSG_SEPARATOR}\n\n"
-	$(MAKE) localstack-init
-	$(MAKE) dk-database-up
-
-localstack-init:
+localstack-init: init
 	echo "\n\n${MSG_SEPARATOR}\n\n Creating S3 Bucket \"${AWS_LOCALSTACK_S3_BUCKET_NAME}\" \n\n${MSG_SEPARATOR}\n\n"
 	docker exec local-aws awslocal s3 mb s3://${AWS_LOCALSTACK_S3_BUCKET_NAME}
 
-dk-database-up:
+database-up:
 	echo "\n\n${MSG_SEPARATOR}\n\n 🐘  Starting database \n\n${MSG_SEPARATOR}\n"
 	docker compose -f ../../etc/docker/postgres/docker-compose.yml build  --force-rm
 	docker compose -f ../../etc/docker/postgres/docker-compose.yml up -d
 
-dk-build-skip-tests: dk-rmi build
+database-down:
+	echo "\n\n${MSG_SEPARATOR}\n\n 🐘  Starting database \n\n${MSG_SEPARATOR}\n"
+	docker compose -f ../../etc/docker/postgres/docker-compose.yml down --remove-orphans
+
+dk-build-skip-tests: dk-rmi build-skip-tests
 	echo "\n\n${MSG_SEPARATOR}\n\n 🐳 dk-build - ${RED}skip tests${NO_COLOUR} => Building the docker image with name ${DOCKER_IMAGE_NAME} ...\n\n${MSG_SEPARATOR}\n\n"
 
 	APP_NAME=$(APP_NAME)
 	docker compose -f ../../etc/docker/docker-compose.yml -f ../../etc/docker/docker-compose.dev.yml -f ../../etc/docker/image-rescale/docker-compose.dev.yml build  --force-rm
 
-dk-build: dk-rmi build tests
+dk-build: dk-rmi build
 	echo "\n\n${MSG_SEPARATOR}\n\n 🐳 dk-build => Building the docker image with name ${DOCKER_IMAGE_NAME} ...\n\n${MSG_SEPARATOR}\n\n"
 
 	APP_NAME=$(APP_NAME)
@@ -146,7 +173,7 @@ dk-rmi:
 
 	docker rmi ${DOCKER_IMAGE_NAME} 2> /dev/null || true
 
-up:
+up: check-localstack check-database
 	echo "\n\n${MSG_SEPARATOR}\n\n 🐳 up => 🚀  Start container ${DOCKER_IMAGE_NAME} \n\n${MSG_SEPARATOR}\n\n"
 
 	docker compose -f ../../etc/docker/docker-compose.yml -f ../../etc/docker/docker-compose.dev.yml -f ../../etc/docker/image-rescale/docker-compose.dev.yml up -d
@@ -155,7 +182,7 @@ up:
 	echo ""
 	echo "  - ⭐️ Application: ${PROJECT_NAME} -> Port: 8080"
 	echo "  - 🔍 Go to - http://localhost:8080/health"
-	echo "  - 📑 Documentation - http://localhost:8080/swagger-ui/"
+	echo "  - 📑 Documentation - http://localhost:8080/swagger-ui/index.html"
 	echo "\n${MSG_SEPARATOR}\n\n"
 
 down:
