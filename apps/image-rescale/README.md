@@ -6,19 +6,19 @@ To serve Images to clients on different devices, we decided to create a simple s
 We are going to implement a functional PoC for the team, allowing them to test it as soon as possible.
 
 
-## Prerequisites
+## Prerequisites 📝
 
 - Docker
 - Docker Compose
 - Java 21
 
-## Available Commands
+## Available Commands ⌘
 
 ```bash
 make help                         # Display all available commands with descriptions
 ```
 
-## Standalone Application Lifecycle Management
+## Standalone Application Lifecycle Management ☕
 
 To be able to run the application locally, you'll need to have running some infrastructure services:
 
@@ -60,7 +60,7 @@ To be able to run the application locally, you'll need to have running some infr
    The application will be available at `http://localhost:8080/`
 
 
-## Dockerized Application Lifecycle Management
+## Dockerized Application Lifecycle Management 🐳
 
 1. **Build the Docker image**
    ```bash
@@ -85,10 +85,7 @@ To be able to run the application locally, you'll need to have running some infr
    make dk-rmi                    # 🧹 Remove docker image
    ```
 
-
-
-
-## Testing
+## Testing 🧪
 
 ```bash
 make tests                        # ✅ Run all tests (unit + integration)
@@ -104,8 +101,11 @@ make integration-tests            # ✅ Run integration tests only
 - **Unit tests**: the ones located at the packages that matches the pattern `com.newsnow.*.core.*`
 - **Integration tests**: located at the packages that matches the pattern `com.newsnow.*.adapters.*`, `com.newsnow.*.infrastructure.*`, `com.newsnow.*.imagerescale`
 
+## Postman 📬
 
-## URLs of interest
+You can find a [Postman collection in this folder](./postman) with the local environment configuration. Just import into Postman and start testing the API.
+
+## URLs of interest 🔗
 
 When the container is running, you can access:
 - **Application Health Check**: http://localhost:8080/health
@@ -114,7 +114,7 @@ When the container is running, you can access:
   It's a simple static frontend application to test the image rescale service in a more user-friendly way.
 
 
-## Versioned Builds (CI/CD)
+## Versioned Builds (CI/CD) 📦
 ```bash
 make dk-build-version IMAGE_VERSION=1.0.0 PROFILE=prod
 make dk-push IMAGE_VERSION=1.0.0 PROFILE=prod
@@ -128,7 +128,7 @@ The application supports multiple environments through profiles:
 
 Environment files are automatically created from samples during `make init`.
 
-## Troubleshooting
+## Troubleshooting ⚠️
 
 ### Common Issues
 
@@ -136,6 +136,7 @@ Environment files are automatically created from samples during `make init`.
 2. **Missing .env files**: Run `make init` to create from samples
 3. **Docker issues**: Ensure Docker daemon is running
 4. **Java version**: Verify Java 21 is installed and active
+5. **Configured URLs**: Review the configured URLs in the .env files
 
 ### Cleanup Commands
 
@@ -149,7 +150,7 @@ make clean                # Clean Gradle build
 make dk-rmi               # Remove Docker images
 ```
 
-## Configuration Files
+## Configuration Files ⚙️
 
 - **LocalStack**:
   - `etc/docker/localstack`

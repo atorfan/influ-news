@@ -10,7 +10,7 @@ We foresee that there will be huge traffic spikes since we will be relying heavi
 If you want documentation about the system, check [this based on C4 model](docs/ARCHITECTURE.md).
 
 
-# Development Setup and Commands
+# Development Setup and Commands 🔧
 
 This repository follows a monorepo structure, and each application has its own documentation to provide a
 comprehensive guide to running, testing, and working with the application using the provided Makefiles.
@@ -21,12 +21,12 @@ comprehensive guide to running, testing, and working with the application using 
 
 ## Root Project
 
-### Prerequisites
+### Prerequisites 📝
 
 - Docker
 - Docker Compose
 
-### Available Commands
+### Available Commands ⌘
 
 ```bash
 make help                 # Display all available commands with descriptions
