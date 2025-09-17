@@ -2,7 +2,8 @@ name: PR pipeline
 on:
   pull_request:
     paths:
-      - "apps/image-rescale/**"
+      - '.github/workflows/image-rescale/**'
+      - 'apps/image-rescale/**'
     branches:
       - "main"
     types: [synchronize, opened, reopened, ready_for_review]
