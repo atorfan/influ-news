@@ -2,8 +2,7 @@ name: Main pipeline
 on:
   push:
     paths:
-      - '.github/workflows/image-rescale/**'
-      - 'apps/image-rescale/**'
+      - 'apps/image-rescale'
     branches:
       - "main"
 
