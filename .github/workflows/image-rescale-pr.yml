@@ -1,14 +1,8 @@
-name: PR pipeline
+name: Image Rescale PR pipeline
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      app_name:
-        description: 'Application name'
-        required: true
-        default: 'image-rescale'
-        type: string
   pull_request:
+    paths:
+      - 'apps/image-rescale'
     branches:
       - "main"
     types: [synchronize, opened, reopened, ready_for_review]
@@ -27,5 +21,5 @@ jobs:
     name: PR pipeline for image-rescale
     uses: ./.github/workflows/job-tests.yml
     with:
-      app_name: ${{ inputs.app_name }}
+      app_name: image-rescale
     secrets: inherit

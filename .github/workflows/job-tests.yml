@@ -12,7 +12,6 @@ on:
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  WORKING_DIRECTORY: '/apps/${{ inputs.app_name }}'
 
 name: Testing pipeline
 jobs:
@@ -21,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+        working-directory: /apps/${{ inputs.app_name }}
     permissions:
       checks: write
       pull-requests: write
@@ -36,6 +35,9 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "21"
+
+      - name: echo app name
+        run: echo '${{ inputs.app_name }}'
 
       - name: build
         run: make build
