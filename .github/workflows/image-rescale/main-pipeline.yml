@@ -1,0 +1,63 @@
+name: Main pipeline
+on:
+  push:
+    paths:
+      - "apps/image-rescale/**"
+    branches:
+      - "main"
+
+# Ensures that only a single job or workflow using the same concurrency group (branch) will run at a time
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+  tests:
+    name: Main pipeline for image-rescale
+    uses: ./.github/workflows/job-tests.yml
+    with:
+      app_name: image-rescale
+    secrets: inherit
+
+  report-status:
+    runs-on: ubuntu-latest
+    name: Report status
+    needs: tests
+    steps:
+      - name: Set badge color
+        shell: bash
+        run: |
+          case ${{ fromJSON( needs.tests.outputs.test-results ).conclusion }} in
+            success)
+              echo "BADGE_COLOR=31c653" >> $GITHUB_ENV
+              ;;
+            failure)
+              echo "BADGE_COLOR=800000" >> $GITHUB_ENV
+              ;;
+            neutral)
+              echo "BADGE_COLOR=696969" >> $GITHUB_ENV
+              ;;
+          esac
+
+      - name: Create badge
+        uses: emibcn/badge-action@808173dd03e2f30c980d03ee49e181626088eee8
+        with:
+          label: Tests
+          status: '${{ fromJSON( needs.tests.outputs.test-results ).formatted.stats.tests }} tests, ${{ fromJSON( needs.tests.outputs.test-results ).formatted.stats.runs }} runs: ${{ fromJSON( needs.tests.outputs.test-results ).conclusion }}'
+          color: ${{ env.BADGE_COLOR }}
+          path: badge.svg
+
+      - name: Upload badge to Gist
+        # Upload only for main branch
+        if: >
+          github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' ||
+          github.event_name != 'workflow_run' && github.ref == 'refs/heads/main'
+        uses: andymckay/append-gist-action@ab30bf28df67017c7ad696500b218558c7c04db3
+        with:
+          token: ${{ secrets.GIST_SAVER_TOKEN }}
+          gistURL: https://gist.githubusercontent.com/${{github.actor}}/419918a15fff1a5ec74126888f73d4ae
+          file: badge.svg

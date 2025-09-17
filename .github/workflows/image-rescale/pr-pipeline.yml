@@ -1,0 +1,28 @@
+name: PR pipeline
+on:
+  pull_request:
+    paths:
+      - "apps/image-rescale/**"
+    branches:
+      - "main"
+    types: [synchronize, opened, reopened, ready_for_review]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Ensures that only a single job or workflow using the same concurrency group (branch) will run at a time
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+  tests:
+    name: PR pipeline for image-rescale
+    uses: ./.github/workflows/job-tests.yml
+    with:
+      app_name: image-rescale
+    secrets: inherit
