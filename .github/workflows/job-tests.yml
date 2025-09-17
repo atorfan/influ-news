@@ -10,9 +10,9 @@ on:
       test-results:
         value: ${{ jobs.tests.outputs.test-results }}
 
-
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  WORKING_DIRECTORY: '/apps/${{ inputs.app_name }}'
 
 name: Testing pipeline
 jobs:
@@ -21,7 +21,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: '/apps/${{ inputs.app_name }}'
+        working-directory: ${{ env.WORKING_DIRECTORY }}
     permissions:
       checks: write
       pull-requests: write
@@ -36,12 +36,6 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "21"
-
-      - name: Get seconds since epoch into an env variable
-        run: echo "SECONDS_SINCE_EPOCH=$(date +%s)" >> $GITHUB_ENV
-
-      - name: Remove slash from branch
-        run: echo "BRANCH_NO_SLASH=$(basename ${{ env.BRANCH_NAME }})" >> $GITHUB_ENV
 
       - name: build
         run: make build
