@@ -11,12 +11,12 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/etc/docker/**/*"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "docker-compose"
-    directory: "/"
+    directory: "/etc/docker/**/*"
     schedule:
       interval: "weekly"
 
