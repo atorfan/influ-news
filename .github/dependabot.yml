@@ -6,17 +6,20 @@
 version: 2
 updates:
   - package-ecosystem: "gradle"
-    directory: "/apps/**/*"
+    directories:
+      - "/apps/**/*"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "docker"
-    directory: "/etc/docker/**/*"
+    directories:
+      - "/etc/docker/**/*"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "docker-compose"
-    directory: "/etc/docker/**/*"
+    directories:
+      - "/etc/docker/**/*"
     schedule:
       interval: "weekly"
 
