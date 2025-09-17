@@ -21,7 +21,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: /apps/${{ inputs.app_name }}
+        working-directory: '/apps/${{ inputs.app_name }}'
     permissions:
       checks: write
       pull-requests: write
