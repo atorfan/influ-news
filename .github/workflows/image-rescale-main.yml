@@ -1,4 +1,4 @@
-name: Main pipeline
+name: Image Rescale Main pipeline
 on:
   push:
     paths:
