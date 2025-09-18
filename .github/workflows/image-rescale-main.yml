@@ -60,5 +60,5 @@ jobs:
         uses: andymckay/append-gist-action@ab30bf28df67017c7ad696500b218558c7c04db3
         with:
           token: ${{ secrets.GIST_SAVER_TOKEN }}
-          gistURL: https://gist.githubusercontent.com/${{github.actor}}/image-rescale/419918a15fff1a5ec74126888f73d4ae
+          gistURL: https://gist.githubusercontent.com/${{github.actor}}/6e6ebc0bea68c8d2115d0cb9de886276
           file: badge.svg

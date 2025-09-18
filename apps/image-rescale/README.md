@@ -1,3 +1,4 @@
+[![Test Count](https://gist.githubusercontent.com/atorfan/6e6ebc0bea68c8d2115d0cb9de886276/raw/badge.svg)](https://github.com/atorfan/influ-news/actions)
 
 # Image Rescale Application
 
