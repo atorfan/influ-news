@@ -36,7 +36,7 @@ jobs:
           java-version: "21"
 
       - name: build
-        run: make build
+        run: make build-skip-tests
 
       - name: tests
         run: make tests
