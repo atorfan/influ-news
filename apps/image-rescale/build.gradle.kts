@@ -62,7 +62,7 @@ dependencies {
     testImplementation("org.testcontainers:localstack")
 
     // Use JUnit Jupiter for testing.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.12.+")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.+")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
