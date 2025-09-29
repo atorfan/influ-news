@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   database:
-    image: "postgres:17-alpine"
+    image: "postgres:18-alpine"
     container_name: "influ-news-pgsql"
     environment:
       POSTGRES_DB: influ-news
