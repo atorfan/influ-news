@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 ENV NAME_JAR="image-rescale"
 ENV packageFile="/var/app/${NAME_JAR}.jar"
