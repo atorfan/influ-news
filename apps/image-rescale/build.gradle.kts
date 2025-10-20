@@ -14,7 +14,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom("org.testcontainers:testcontainers-bom:1.21.+")
+        mavenBom("org.testcontainers:testcontainers-bom:2.0.+")
         mavenBom("io.awspring.cloud:spring-cloud-aws-dependencies:3.4.+")
     }
 }
