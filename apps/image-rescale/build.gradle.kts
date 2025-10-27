@@ -23,7 +23,7 @@ dependencies {
     // Vavr with Either
     implementation("io.vavr:vavr:0.10.+")
 
-    implementation("net.logstash.logback:logstash-logback-encoder:8.1")
+    implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // Image rescale library
     implementation("net.coobird:thumbnailator:0.4.+")
